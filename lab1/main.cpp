@@ -6,10 +6,6 @@
 #include "calc.hpp"
 
 #define MAX_NODES 20
-
-#define LEFT_BOUND -4.0
-#define RIGHT_BOUND 5.0
-
 #define POINTS_FOR_ERROR_CALC 100
 
 using std::ofstream;
@@ -53,7 +49,7 @@ int main() {
     // Исследуем гладкую функцию
     char filename[100];
     sprintf(filename, "data/nodes_error_chebyshev_smooth.csv");
-    nodes_errorUniform(smoothFunction, filename);
+    nodes_errorChebyshev(smoothFunction, filename);
     sprintf(filename, "data/nodes_error_uniform_smooth.csv");
     nodes_errorUniform(smoothFunction, filename);
 
