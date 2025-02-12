@@ -5,5 +5,5 @@ double smoothFunction(double x) {
 }
 
 double breakdownFunction(double x) {
-    return smoothFunction(x) / (x + 1);
+    return smoothFunction(x) / (x + 0.60742786528740884936);
 }
