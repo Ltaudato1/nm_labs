@@ -8,8 +8,6 @@
 #define MAX_NODES 20
 #define POINTS_FOR_ERROR_CALC 100
 
-using std::ofstream;
-
 void nodes_errorChebyshev(double (*function) (double), char* const filename) {
     FILE* fp = fopen(filename, "w");
     fprintf(fp, "nodes,error\n");

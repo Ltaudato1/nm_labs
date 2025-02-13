@@ -10,6 +10,7 @@
 struct Point {
     double x;
     double y;
+    double dividedDifference; // в массиве данное поле i-го элемента хранит в себе [y_0, ..., y_i]
 };
 
 void getChebyshevGrid(Point *grid, double (*function) (double), int nodes);
