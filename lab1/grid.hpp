@@ -13,7 +13,11 @@ struct Point {
     double dividedDifference; // в массиве данное поле i-го элемента хранит в себе [y_0, ..., y_i]
 };
 
-void getChebyshevGrid(Point *grid, double (*function) (double), int nodes);
-void getUniformGrid(Point *grid, double (*function) (double), int nodes, double x_0);
+enum Type {
+    CHEBYSHEV,
+    UNIFORM
+};
+
+void getGrid(Type gridType, Point *grid, double (*function) (double), int nodes);
 
 #endif
