@@ -4,6 +4,6 @@
 #ifndef CALC_HPP
 #define CALC_HPP
 
-double getPolynomValue(Point* grid, double x, int nodes);
+double getPolynomValue(const Point* const grid, double x, int nodes);
 
 #endif
