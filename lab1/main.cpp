@@ -18,7 +18,7 @@
  * @note Погрешность вычисляется как наибольшее отклонение от вычисляемой функции в одной из ста точек,
  * равномерно разделённых на промежутке интерполирования
  * 
-**/
+ */
 void nodes_errorResearch(double (*function) (double), char* const filename, Type gridType) {
     FILE* fp = fopen(filename, "w");
     fprintf(fp, "nodes,error\n");

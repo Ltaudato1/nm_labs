@@ -1,11 +1,8 @@
 #pragma once
 #include <math.h>
 
-#ifndef STRUCTS_HPP
-#define STRUCTS_HPP
-
-#define LEFT_BOUND -4.0
-#define RIGHT_BOUND 5.0
+#define LEFT_BOUND -4.0     ///< Левая граница промежутка интерполирования
+#define RIGHT_BOUND 5.0     ///< Правая граница промежутка интерполирования
 
 /**
  * @brief Структура для представления точки на плоскости с дополнительной информацией.
@@ -32,5 +29,3 @@ enum Type {
 };
 
 void getGrid(Type gridType, Point *grid, double (*function) (double), int nodes);
-
-#endif

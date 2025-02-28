@@ -8,7 +8,7 @@
  * @param x Значение, для которого вычисляется значение полинома
  * @param nodes Общее количество узлов
  * 
-**/
+ */
 double getPolynomValue(const Point* const grid, double x, int nodes) {
     double result = 0;
     double product = 1;
