@@ -40,12 +40,11 @@ void getGrid(Type gridType, Point *grid, double (*function) (double), double (*d
     for (int i = 0; i < nodes; ++i) {
         double x;
         if (gridType == CHEBYSHEV) {
-            x = functionForChebyshev(i, nodes);
-            grid[nodes - i - 1] = {x, function(x), derivative(x)};
+            x = functionForChebyshev(nodes - i - 1, nodes);
         }
         else if (gridType == UNIFORM){
             x = functionForUniform(i, nodes);
-            grid[i] = {x, function(x), derivative(x)};
         }
+        grid[i] = {x, function(x), derivative(x)};
     }
 }

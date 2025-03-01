@@ -4,8 +4,9 @@
 #include "functions.hpp"
 #include "calc.hpp"
 
-#define MAX_NODES 20
-#define POINTS_FOR_ERROR_CALC 100
+#define MAX_NODES 100
+#define NODES_FOR_PLOT 5
+#define POINTS_FOR_ERROR_CALC 1000
 
 /**
  * @brief Функция запускает процесс исследования зависимости погрешности вычисления значения функции
@@ -14,46 +15,58 @@
  * @param function Указатель на функцию, по которой будет построена сеточная функция
  * @param function Указатель на функцию, в которой будет обсчитываться производная сеточной функции
  * @param filename Путь до текстового файла, куда будут записаны полученные результаты
+ * @param filenamePlot Путь до текстового файла, куда будут записаны данные для построения графика интерполяционного сплайна
  * @param gridType Тип исследуемой сетки
  * 
  * @note Погрешность вычисляется как наибольшее отклонение от вычисляемой функции в одной из POINTS_FOR_ERROR_CALC точек,
  * равномерно разделённых на промежутке интерполирования
  * 
  */
-void nodes_errorResearch(double (*function) (double), double (*derivative) (double), char* const filename, Type gridType) {
+void nodes_errorResearch(double (*function) (double), double (*derivative) (double), char* const filename, char* const filenamePlot, Type gridType) {
     FILE* fp = fopen(filename, "w");
+    FILE* fpPlot = fopen(filenamePlot, "w");
     fprintf(fp, "nodes,error\n");
+    fprintf(fpPlot, "x,y\n");
     for (int i = 2; i <= MAX_NODES; ++i) {
         Point *grid {new Point[i]};
         getGrid(gridType, grid, function, derivative, i);
-
         double error = 0;
         for (int j = 1; j < POINTS_FOR_ERROR_CALC; ++j) {
             double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC);
-            double currentError = fabs(function(x) - getSplineValue(grid, x, i));
+            double y = getSplineValue(grid, x, i);
+
+            double currentError = fabs(function(x) - y);
             if (currentError > error) error = currentError;
+
+            if (i == NODES_FOR_PLOT) fprintf(fpPlot, "%.20f,%.20f\n", x, y);
         }
         fprintf(fp, "%d,%.20f\n", i, error);
         delete[] grid;
     }
     fclose(fp);
+    fclose(fpPlot);
 }
 
 
 void startResearches() {
     char filename[100];
+    char filenamePlot[100];
 
     // Исследуем гладкую функцию
     sprintf(filename, "data/nodes_error_chebyshev_smooth.csv");
-    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, CHEBYSHEV);
+    sprintf(filenamePlot, "data/chebyshev_smooth_plot.csv");
+    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, filenamePlot, CHEBYSHEV);
     sprintf(filename, "data/nodes_error_uniform_smooth.csv");
-    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, UNIFORM);
+    sprintf(filenamePlot, "data/uniform_smooth_plot.csv");
+    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, filenamePlot, UNIFORM);
 
     // Исследуем функцию с разрывом
     sprintf(filename, "data/nodes_error_chebyshev_breakdown.csv");
-    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, CHEBYSHEV);
+    sprintf(filenamePlot, "data/chebyshev_breakdown_plot.csv");
+    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, filenamePlot, CHEBYSHEV);
     sprintf(filename, "data/nodes_error_uniform_breakdown.csv");
-    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, UNIFORM);
+    sprintf(filenamePlot, "data/uniform_breakdown_plot.csv");
+    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, filenamePlot, UNIFORM);
 }
 
 int main() {
