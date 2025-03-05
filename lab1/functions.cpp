@@ -10,5 +10,5 @@ double smoothFunction(double x) {
  * @brief Возвращает значение гладкой функции с разрывом в заданной точке
  */
 double breakdownFunction(double x) {
-    return smoothFunction(x) / (x + log(2));
+    return abs(x - log(2)) * sin(x) + 1;
 }
