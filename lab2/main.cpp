@@ -5,7 +5,7 @@
 #include "calc.hpp"
 
 #define MAX_NODES 100
-#define NODES_FOR_PLOT 5
+#define NODES_FOR_PLOT 8
 #define POINTS_FOR_ERROR_CALC 1000
 
 /**
@@ -22,11 +22,9 @@
  * равномерно разделённых на промежутке интерполирования
  * 
  */
-void nodes_errorResearch(double (*function) (double), double (*derivative) (double), char* const filename, char* const filenamePlot, Type gridType) {
+void nodes_errorResearch(double (*function) (double), double (*derivative) (double), char* const filename, Type gridType) {
     FILE* fp = fopen(filename, "w");
-    FILE* fpPlot = fopen(filenamePlot, "w");
     fprintf(fp, "nodes,error\n");
-    fprintf(fpPlot, "x,y\n");
     for (int i = 2; i <= MAX_NODES; ++i) {
         Point *grid {new Point[i]};
         getGrid(gridType, grid, function, derivative, i);
@@ -37,14 +35,11 @@ void nodes_errorResearch(double (*function) (double), double (*derivative) (doub
 
             double currentError = fabs(function(x) - y);
             if (currentError > error) error = currentError;
-
-            if (i == NODES_FOR_PLOT) fprintf(fpPlot, "%.20f,%.20f\n", x, y);
         }
         fprintf(fp, "%d,%.20f\n", i, error);
         delete[] grid;
     }
     fclose(fp);
-    fclose(fpPlot);
 }
 
 
@@ -55,21 +50,95 @@ void startResearches() {
     // Исследуем гладкую функцию
     sprintf(filename, "data/nodes_error_chebyshev_smooth.csv");
     sprintf(filenamePlot, "data/chebyshev_smooth_plot.csv");
-    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, filenamePlot, CHEBYSHEV);
+    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, CHEBYSHEV);
     sprintf(filename, "data/nodes_error_uniform_smooth.csv");
     sprintf(filenamePlot, "data/uniform_smooth_plot.csv");
-    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, filenamePlot, UNIFORM);
+    nodes_errorResearch(smoothFunction, smoothFunctionDerivative, filename, UNIFORM);
 
     // Исследуем функцию с разрывом
     sprintf(filename, "data/nodes_error_chebyshev_breakdown.csv");
     sprintf(filenamePlot, "data/chebyshev_breakdown_plot.csv");
-    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, filenamePlot, CHEBYSHEV);
+    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, CHEBYSHEV);
     sprintf(filename, "data/nodes_error_uniform_breakdown.csv");
     sprintf(filenamePlot, "data/uniform_breakdown_plot.csv");
-    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, filenamePlot, UNIFORM);
+    nodes_errorResearch(breakdownFunction, breakdownFunctionDerivative, filename, UNIFORM);
+}
+
+
+void makePlots() {
+    char filename[100];
+
+    for (int i = 2; i <= NODES_FOR_PLOT; i += 2) {
+        sprintf(filename, "data/chebyshev_smooth_%d.csv", i);
+        Point *grid {new Point[i]};
+        getGrid(CHEBYSHEV, grid, smoothFunction, smoothFunctionDerivative, i);
+        FILE* fp = fopen(filename, "w");
+        fprintf(fp, "x,y\n");
+
+        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+            double y = getSplineValue(grid, x, i);
+
+            fprintf(fp, "%.20f,%.20f\n", x, y);
+        }
+
+        fclose(fp);
+    }
+
+    for (int i = 2; i <= NODES_FOR_PLOT; i += 2) {
+        sprintf(filename, "data/chebyshev_breakdown_%d.csv", i);
+        Point *grid {new Point[i]};
+        getGrid(CHEBYSHEV, grid, breakdownFunction, breakdownFunctionDerivative, i);
+        FILE* fp = fopen(filename, "w");
+        fprintf(fp, "x,y\n");
+
+        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+            double y = getSplineValue(grid, x, i);
+
+            fprintf(fp, "%.20f,%.20f\n", x, y);
+        }
+
+        fclose(fp);
+    }
+
+    for (int i = 2; i <= NODES_FOR_PLOT; i += 2) {
+        sprintf(filename, "data/uniform_smooth_%d.csv", i);
+        Point *grid {new Point[i]};
+        getGrid(UNIFORM, grid, smoothFunction, smoothFunctionDerivative, i);
+        FILE* fp = fopen(filename, "w");
+        fprintf(fp, "x,y\n");
+
+        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+            double y = getSplineValue(grid, x, i);
+
+            fprintf(fp, "%.20f,%.20f\n", x, y);
+        }
+
+        fclose(fp);
+    }
+
+    for (int i = 2; i <= NODES_FOR_PLOT; i += 2) {
+        sprintf(filename, "data/uniform_breakdown_%d.csv", i);
+        Point *grid {new Point[i]};
+        getGrid(UNIFORM, grid, breakdownFunction, breakdownFunctionDerivative, i);
+        FILE* fp = fopen(filename, "w");
+        fprintf(fp, "x,y\n");
+
+        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+            double y = getSplineValue(grid, x, i);
+
+            fprintf(fp, "%.20f,%.20f\n", x, y);
+        }
+
+        fclose(fp);
+    }
 }
 
 int main() {
     startResearches();
+    makePlots();
     return 0;
 }

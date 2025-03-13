@@ -13,9 +13,9 @@ int findInterpolationInterval(const Point* const grid, double const x, int const
     int l = 0;
     int r = nodes - 1;
     while (r - l != 1) {
-        int c = (l + r) / 2;
-        if (x < grid[c].x) r = c;
-        else l = c;
+        int mid = (l + r) / 2;
+        if (x < grid[mid].x) r = mid;
+        else l = mid;
     }
     return r;
 }
@@ -32,14 +32,13 @@ double getSplineValue(const Point* const grid, double const x, int const nodes) 
     int r = findInterpolationInterval(grid, x, nodes);
     int l = r - 1;
 
-    long double diffSquared = (grid[r].x - grid[l].x) * (grid[r].x - grid[l].x);
     double tr = x - grid[r].x;
     double tl = x - grid[l].x;
 
-    double psi_l = tl * tr * tr / diffSquared;
-    double psi_r = tr * tl * tl / diffSquared;
-    double phi_l = (1 - 2 * tl / (grid[l].x - grid[r].x)) * tr * tr / diffSquared;
-    double phi_r = (1 - 2 * tr / (grid[r].x - grid[l].x)) * tl * tl / diffSquared;
+    double psi_l = tl * tr * tr / (grid[r].diff * grid[r].diff);
+    double psi_r = tr * tl * tl / (grid[r].diff * grid[r].diff);
+    double phi_l = (1 + 2 * tl / grid[r].diff) * tr * tr / (grid[r].diff * grid[r].diff);
+    double phi_r = (1 - 2 * tr / grid[r].diff) * tl * tl / (grid[r].diff * grid[r].diff);
 
     return grid[l].y * phi_l + grid[l].yDerivative * psi_l + grid[r].y * phi_r + grid[r].yDerivative * psi_r;
 }

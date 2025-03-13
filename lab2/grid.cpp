@@ -45,6 +45,11 @@ void getGrid(Type gridType, Point *grid, double (*function) (double), double (*d
         else if (gridType == UNIFORM){
             x = functionForUniform(i, nodes);
         }
-        grid[i] = {x, function(x), derivative(x)};
+        grid[i].x = x;
+        grid[i].y = function(x);
+        grid[i].yDerivative = derivative(x);
+
+        if (i == 0) grid[i].diff = 0;
+        else grid[i].diff = grid[i].x - grid[i-1].x;
     }
 }

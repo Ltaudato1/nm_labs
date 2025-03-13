@@ -18,12 +18,12 @@ double smoothFunctionDerivative(double x) {
  * @brief Возвращает значение гладкой функции с разрывом производной в заданной точке
  */
 double breakdownFunction(double x) {
-    return 3*x - 14 + exp(abs(x + log(2)));
+    return abs(x + log(2)) * sin(x) + 1;
 }
 
 /**
  * @brief Возвращает значение производной гладкой функции с разрывом производной в заданной точке
  */
 double breakdownFunctionDerivative(double x) {
-    return 3 + (x + log(2)) * exp(abs(x + log(2))) / abs(x + log(2));
+    return (x + log(2)) * (sin(x) + (x + log(2)) * cos(x)) / abs(x + log(2));
 }
