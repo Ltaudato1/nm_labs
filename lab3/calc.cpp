@@ -1,25 +1,16 @@
 #include <iostream>
 #include <math.h>
 
-double getIntegral(double (*function) (double), double leftBound, double rightBound, double precision) {
-    if (leftBound > rightBound) return (-1) * getIntegral(function, rightBound, leftBound, precision);
+double getIntegral(double (*function) (double), double leftBound, double rightBound, int partitions) {
+    if (leftBound > rightBound) return (-1) * getIntegral(function, rightBound, leftBound, partitions);
 
-    double h = (rightBound - leftBound) / 2;
-    int points = 2;
-    double I_n = 2 * h * function(h);
-    double I_2n = h * (function(h / 2) + function(3 * h / 2));
+    double h = (rightBound - leftBound) / partitions;
 
-    while (fabs(I_2n - I_n) > precision) {
-        I_n = I_2n;
-        I_2n = 0;
-        h /= 2;
-        points *= 2;
+    double integralValue = 0;
 
-        for (int i = 0; i < points; ++i) {
-            I_2n += function(leftBound + i * h + h / 2);
-        }
-        I_2n *= h;
+    for (int i = 0; i < partitions; ++i) {
+        integralValue += function(leftBound + i * h + h / 2);
     }
 
-    return I_2n;
+    return integralValue * h;
 }
