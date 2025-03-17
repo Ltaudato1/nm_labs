@@ -4,9 +4,9 @@
 #include "functions.hpp"
 #include "calc.hpp"
 
-#define MAX_NODES 33
+#define MAX_NODES 41
 #define NODES_FOR_PLOT 8
-#define POINTS_FOR_ERROR_CALC 1000
+#define POINTS_FOR_ERROR_CALC 10
 
 /**
  * @brief Функция запускает процесс исследования зависимости погрешности вычисления значения функции
@@ -28,8 +28,8 @@ void nodes_errorResearch(double (*function) (double), char* const filename, Type
         getGrid(gridType, grid, function, i);
 
         double error = 0;
-        for (int j = 1; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+        for (int j = 1; j < POINTS_FOR_ERROR_CALC * i; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC * i - 1);
             double currentError = fabs(function(x) - getPolynomValue(grid, x, i));
             if (currentError > error) error = currentError;
         }
