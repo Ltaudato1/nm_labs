@@ -4,7 +4,7 @@
 #include "functions.hpp"
 #include "calc.hpp"
 
-#define MAX_NODES 100
+#define MAX_NODES 7
 #define NODES_FOR_PLOT 8
 #define POINTS_FOR_ERROR_CALC 1000
 
@@ -25,18 +25,18 @@
 void nodes_errorResearch(double (*function) (double), double (*derivative) (double), char* const filename, Type gridType) {
     FILE* fp = fopen(filename, "w");
     fprintf(fp, "nodes,error\n");
-    for (int i = 2; i <= MAX_NODES; ++i) {
-        Point *grid {new Point[i]};
-        getGrid(gridType, grid, function, derivative, i);
+    for (int i = 1; i <= MAX_NODES; ++i) {
+        int nodes = pow(2, i);
+        Point *grid {new Point[nodes]};
+        getGrid(gridType, grid, function, derivative, nodes);
         double error = 0;
         for (int j = 1; j < POINTS_FOR_ERROR_CALC; ++j) {
             double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC);
-            double y = getSplineValue(grid, x, i);
 
-            double currentError = fabs(function(x) - y);
+            double currentError = fabs(function(x) - getSplineValue(grid, x, nodes));
             if (currentError > error) error = currentError;
         }
-        fprintf(fp, "%d,%.20f\n", i, error);
+        fprintf(fp, "%d,%.20f\n", nodes, error);
         delete[] grid;
     }
     fclose(fp);
