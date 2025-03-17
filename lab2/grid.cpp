@@ -49,7 +49,25 @@ void getGrid(Type gridType, Point *grid, double (*function) (double), double (*d
         grid[i].y = function(x);
         grid[i].yDerivative = derivative(x);
 
-        if (i == 0) grid[i].diff = 0;
-        else grid[i].diff = grid[i].x - grid[i-1].x;
+        if (i == 0) {
+            grid[i].a = 0;
+            grid[i].b = 0;
+            grid[i].c = 0;
+            grid[i].d = 0;
+        } else {
+            double tr = (grid[i].x - grid[i-1].x);  // x_r - x_l
+
+            grid[i].a = 2 * (grid[i-1].y - grid[i].y) / (tr * tr * tr) + (grid[i].yDerivative + grid[i-1].yDerivative) / (tr * tr);
+
+            grid[i].b = 3 * (grid[i].x + grid[i-1].x) * (grid[i].y - grid[i-1].y) / (tr * tr * tr);
+            grid[i].b += ((-2 * grid[i-1].x - grid[i].x) * grid[i].yDerivative + (-2 * grid[i].x - grid[i-1].x) * grid[i-1].yDerivative) / (tr * tr);
+
+            grid[i].c = - 6 * grid[i].x * grid[i-1].x * (grid[i].y - grid[i-1].y) / (tr * tr * tr);
+            grid[i].c += ((grid[i-1].x * grid[i-1].x + 2 * grid[i].x * grid[i-1].x) * grid[i].yDerivative + (grid[i].x * grid[i].x + 2 * grid[i].x * grid[i-1].x) * grid[i-1].yDerivative) / (tr * tr);
+
+            grid[i].d = ((3 * grid[i].x * grid[i-1].x * grid[i-1].x - grid[i-1].x * grid[i-1].x * grid[i-1].x) * grid[i].y) / (tr * tr * tr);
+            grid[i].d -= ((3 * grid[i-1].x * grid[i].x * grid[i].x - grid[i].x * grid[i].x * grid[i].x) * grid[i-1].y) / (tr * tr * tr);
+            grid[i].d -= (grid[i].x * grid[i-1].x * grid[i-1].x * grid[i].yDerivative + grid[i-1].x * grid[i].x * grid[i].x * grid[i-1].yDerivative) / (tr * tr);
+        }
     }
 }

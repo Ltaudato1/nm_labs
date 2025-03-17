@@ -30,15 +30,6 @@ int findInterpolationInterval(const Point* const grid, double const x, int const
  */
 double getSplineValue(const Point* const grid, double const x, int const nodes) {
     int r = findInterpolationInterval(grid, x, nodes);
-    int l = r - 1;
 
-    double tr = x - grid[r].x;
-    double tl = x - grid[l].x;
-
-    double psi_l = tl * tr * tr / (grid[r].diff * grid[r].diff);
-    double psi_r = tr * tl * tl / (grid[r].diff * grid[r].diff);
-    double phi_l = (1 + 2 * tl / grid[r].diff) * tr * tr / (grid[r].diff * grid[r].diff);
-    double phi_r = (1 - 2 * tr / grid[r].diff) * tl * tl / (grid[r].diff * grid[r].diff);
-
-    return grid[l].y * phi_l + grid[l].yDerivative * psi_l + grid[r].y * phi_r + grid[r].yDerivative * psi_r;
+    return grid[r].a * x * x * x + grid[r].b * x * x + grid[r].c * x + grid[r].d;
 }
