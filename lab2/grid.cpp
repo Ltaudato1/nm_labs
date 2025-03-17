@@ -62,7 +62,7 @@ void getGrid(Type gridType, Point *grid, double (*function) (double), double (*d
             grid[i].b = 3 * (grid[i].x + grid[i-1].x) * (grid[i].y - grid[i-1].y) / (tr * tr * tr);
             grid[i].b += ((-2 * grid[i-1].x - grid[i].x) * grid[i].yDerivative + (-2 * grid[i].x - grid[i-1].x) * grid[i-1].yDerivative) / (tr * tr);
 
-            grid[i].c = - 6 * grid[i].x * grid[i-1].x * (grid[i].y - grid[i-1].y) / (tr * tr * tr);
+            grid[i].c = 6 * grid[i].x * grid[i-1].x * (grid[i-1].y - grid[i].y) / (tr * tr * tr);
             grid[i].c += ((grid[i-1].x * grid[i-1].x + 2 * grid[i].x * grid[i-1].x) * grid[i].yDerivative + (grid[i].x * grid[i].x + 2 * grid[i].x * grid[i-1].x) * grid[i-1].yDerivative) / (tr * tr);
 
             grid[i].d = ((3 * grid[i].x * grid[i-1].x * grid[i-1].x - grid[i-1].x * grid[i-1].x * grid[i-1].x) * grid[i].y) / (tr * tr * tr);
