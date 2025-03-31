@@ -5,7 +5,7 @@
  * @brief Возвращает значение гладкой функции в заданной точке
  */
 double smoothFunction(double x) {
-    return sin(x);
+    return 2 * sin(x);
 }
 
 /**
