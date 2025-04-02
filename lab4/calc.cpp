@@ -10,9 +10,9 @@ long double gauss3(long double (*function) (long double), long double leftBound,
     long double h = (rightBound - leftBound) / partitions;
 
     vector<long double> coefficients = {
-        5.0 / 9.0,
-        8.0 / 9.0,
-        5.0 / 9.0
+        5.0,
+        8.0,
+        5.0
     };
     
     vector<long double> roots = {
@@ -24,14 +24,12 @@ long double gauss3(long double (*function) (long double), long double leftBound,
     long double integralValue = 0;
 
     for (int i = 0; i < partitions; ++i) {
-        long double a = leftBound + i * h;
-        long double b = leftBound + (i + 1) * h;
-        long double mid = (a + b) / 2.0;
+        long double mid = leftBound + i * h + h / 2;  // (a + b) / 2
 
         for (int j = 0; j < 3; ++j) {
-            integralValue += coefficients[j] * function(h * roots[j] / 2 + mid);
+            integralValue += coefficients[j] * function(mid + h * roots[j] / 2);
         }
     }
 
-    return integralValue * h / 2;
+    return integralValue * h / 18;
 }

@@ -2,6 +2,7 @@
 #include <math.h>
 #include <iomanip>
 #include <fstream>
+#include <string>
 #include "calc.hpp"
 #include "functions.hpp"
 
@@ -13,29 +14,26 @@
 
 #define INTEGRAL_VALUE 4
 
-#define MAX_PARTITION 100000000
+#define MAX_PARTITION 10000000
 
-using std::ofstream;
-using std::setprecision;
 using std::endl;
 
-void part_errorResearch(long double (*function) (long double), long double leftBound, long double rightBound, char* const filename) {
-    ofstream out(filename);
-    out << setprecision(20);
+void part_errorResearch(long double (*function) (long double), long double leftBound, long double rightBound, std::string filename) {
+    std::ofstream out(filename);
+    out << std::setprecision(20);
 
     out << "part,error" << endl;
 
     for (int partition = 1; partition <= MAX_PARTITION; partition *= 10) {
         out << partition << "," << fabs(INTEGRAL_VALUE - gauss3(function, leftBound, rightBound, partition)) << endl;
     }
+
+    out.close();
 }
 
 void startResearches() {
-    char filename[100];
-    sprintf(filename, "data/part_error_smooth.csv");
-    part_errorResearch(smoothFunction, LEFT_BOUND_SMOOTH, RIGHT_BOUND_SMOOTH, filename);
-    sprintf(filename, "data/part_error_breakdown.csv");
-    part_errorResearch(breakdownFunction, LEFT_BOUND_BREAKDOWN, RIGHT_BOUND_BREAKDOWN, filename);
+    part_errorResearch(smoothFunction, LEFT_BOUND_SMOOTH, RIGHT_BOUND_SMOOTH, "data/part_error_smooth.csv");
+    part_errorResearch(breakdownFunction, LEFT_BOUND_BREAKDOWN, RIGHT_BOUND_BREAKDOWN, "data/part_error_breakdown.csv");
 }
 
 int main() {
