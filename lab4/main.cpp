@@ -14,7 +14,7 @@
 
 #define INTEGRAL_VALUE 4
 
-#define MAX_PARTITION 10000000
+#define MAX_PARTITION 32
 
 using std::endl;
 
@@ -24,7 +24,7 @@ void part_errorResearch(long double (*function) (long double), long double leftB
 
     out << "part,error" << endl;
 
-    for (int partition = 1; partition <= MAX_PARTITION; partition *= 10) {
+    for (int partition = 1; partition <= MAX_PARTITION; partition *= 2) {
         out << partition << "," << fabs(INTEGRAL_VALUE - gauss3(function, leftBound, rightBound, partition)) << endl;
     }
 
