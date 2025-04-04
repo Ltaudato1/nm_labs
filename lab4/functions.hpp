@@ -1,4 +1,4 @@
 #pragma once
 
-long double smoothFunction(long double x);
-long double breakdownFunction(long double x);
+double smoothFunction(double x);
+double breakdownFunction(double x);

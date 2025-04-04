@@ -4,13 +4,13 @@
 /**
  * @brief Возвращает значение гладкой функции в заданной точке
  */
-long double smoothFunction(long double x) {
+double smoothFunction(double x) {
     return 2 * sin(x);
 }
 
 /**
  * @brief Возвращает значение функции с разрывом производной в заданной точки
  */
-long double breakdownFunction(long double x) {
+double breakdownFunction(double x) {
     return fabs(x - M_E) * cos(x);
 }

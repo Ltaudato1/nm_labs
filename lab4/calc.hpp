@@ -1,3 +1,3 @@
 #pragma once
 
-long double gauss3(long double (*function) (long double), long double leftBound, long double rightBound, int partitions);
+double gauss3(double (*function) (double), double leftBound, double rightBound, int partitions);
