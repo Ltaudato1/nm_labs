@@ -12,5 +12,5 @@ double smoothFunction(double x) {
  * @brief Возвращает значение функции с разрывом производной в заданной точки
  */
 double breakdownFunction(double x) {
-    return fabs(x - M_PI) * cos(x);
+    return fabs(x - M_E) * cos(x);
 }

@@ -1,4 +1,7 @@
-#include <stdio.h>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
 #include <math.h>
 #include "calc.hpp"
 #include "functions.hpp"
@@ -9,28 +12,31 @@
 #define LEFT_BOUND_BREAKDOWN 0
 #define RIGHT_BOUND_BREAKDOWN 2 * M_PI
 
-#define INTEGRAL_VALUE 4
+#define INTEGRAL_VALUE_SMOOTH 4
+#define INTEGRAL_VALUE_BREAKDOWN 2 - 2 * cos(M_E)
 
-#define MAX_PARTITION 7
+#define MAX_PARTITION 10000000
 
-void part_errorResearch(double (*function) (double), double leftBound, double rightBound, char* const filename) {
-    FILE* fp = fopen(filename, "w");
-    fprintf(fp, "part,error\n");
+using std::ofstream;
+using std::string;
+using std::endl;
+using std::setprecision;
 
-    for (int i = 0; i <= MAX_PARTITION; ++i) {
-        int partition = pow(10, i);
-        fprintf(fp, "%d,%.20f\n", partition, fabs(INTEGRAL_VALUE - getIntegral(function, leftBound, rightBound, partition)));
+void part_errorResearch(double (*function) (double), double leftBound, double rightBound, double integralValue, string filename) {
+    ofstream out(filename);
+    out << setprecision(20);
+    out << "part,error" << endl;
+
+    for (int partition = 1; partition <= MAX_PARTITION; partition *= 10) {
+        out << partition << "," << fabs(integralValue - getIntegral(function, leftBound, rightBound, partition)) << endl;
     }
 
-    fclose(fp);
+    out.close();
 }
 
 void startResearches() {
-    char filename[100];
-    sprintf(filename, "data/part_error_smooth.csv");
-    part_errorResearch(smoothFunction, LEFT_BOUND_SMOOTH, RIGHT_BOUND_SMOOTH, filename);
-    sprintf(filename, "data/part_error_breakdown.csv");
-    part_errorResearch(breakdownFunction, LEFT_BOUND_BREAKDOWN, RIGHT_BOUND_BREAKDOWN, filename);
+    part_errorResearch(smoothFunction, LEFT_BOUND_SMOOTH, RIGHT_BOUND_SMOOTH, INTEGRAL_VALUE_SMOOTH, "data/part_error_smooth.csv");
+    part_errorResearch(breakdownFunction, LEFT_BOUND_BREAKDOWN, RIGHT_BOUND_BREAKDOWN, INTEGRAL_VALUE_BREAKDOWN, "data/part_error_breakdown.csv");
 }
 
 int main() {
