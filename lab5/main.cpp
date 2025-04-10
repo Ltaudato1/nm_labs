@@ -19,17 +19,17 @@ using std::endl;
 using std::vector;
 using std::pair;
 
-void part_errorResearch(long double (*equation) (long double, long double), long double (*answer) (long double), long double leftBound, long double rightBound, long double startCondition, string const filename) {
+void part_errorResearch(double (*equation) (double, double), double (*answer) (double), double leftBound, double rightBound, double startCondition, string const filename) {
     std::ofstream out(filename);
     out << std::setprecision(20);
 
     out << "part,error" << endl;
 
     for (int partition = 2; partition <= MAX_PARTITION; partition *= 2) {
-        vector<pair<long double, long double>> function = runge_cutta4(equation, startCondition, leftBound, rightBound, partition);
-        long double error = fabs(function[1].second - answer(function[1].first));
+        vector<pair<double, double>> function = runge_cutta4(equation, startCondition, leftBound, rightBound, partition);
+        double error = fabs(function[1].second - answer(function[1].first));
         for (int i = 2; i <= partition; ++i) {
-            long double cur = fabs(function[i].second - answer(function[i].first));
+            double cur = fabs(function[i].second - answer(function[i].first));
             if (cur > error) error = cur;
         }
         out << partition << "," << error << endl;

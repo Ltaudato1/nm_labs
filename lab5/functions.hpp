@@ -1,4 +1,4 @@
 #pragma once
 
-long double equation(long double x, long double y);
-long double answer(long double x);
+double equation(double x, double y);
+double answer(double x);

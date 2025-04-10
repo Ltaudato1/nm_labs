@@ -5,4 +5,4 @@
 using std::vector;
 using std::pair;
 
-vector<pair<long double, long double>> runge_cutta4(long double (*equation) (long double, long double), long double startCondition, long double leftBound, long double rightBound, int partitions);
+vector<pair<double, double>> runge_cutta4(double (*equation) (double, double), double startCondition, double leftBound, double rightBound, int partitions);
