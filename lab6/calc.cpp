@@ -27,14 +27,20 @@ vector<pair<double, double>> adams4(double (*equation) (double, double), double 
     double h = (rightBound - leftBound) / partitions;
     vector<pair<double, double>> answer = runge_cutta4_speedup(equation, startCondition, leftBound, h);
 
-    for (int k = 4; k <= partitions; ++k) {
-        double f_0 = - 9 * equation(answer[k-4].first, answer[k-4].second);
-        double f_1 = 37 * equation(answer[k-3].first, answer[k-3].second);
-        double f_2 = - 59 * equation(answer[k-2].first, answer[k-2].second);
-        double f_3 = 55 * equation(answer[k-1].first, answer[k-1].second);
+    double f_0 = equation(answer[0].first, answer[0].second);
+    double f_1 = equation(answer[1].first, answer[1].second);
+    double f_2 = equation(answer[2].first, answer[2].second);
+    double f_3 = equation(answer[3].first, answer[3].second);
 
-        double y_new = answer[k-1].second + h * (f_0 + f_1 + f_2 + f_3) / 24;
-        answer.push_back({leftBound + k * h, y_new});
+    for (int k = 4; k <= partitions; ++k) {
+        double x_new = leftBound + k * h;
+        double y_new = answer[k-1].second + h * (-9 * f_0 + 37 * f_1 - 59 * f_2 + 55 * f_3) / 24;
+        answer.push_back({x_new, y_new});
+
+        f_0 = f_1;
+        f_1 = f_2;
+        f_2 = f_3;
+        f_3 = equation(x_new, y_new);
     }
 
     return answer;
