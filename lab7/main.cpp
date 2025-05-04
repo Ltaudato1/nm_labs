@@ -27,7 +27,7 @@ void part_errorResearch(double (*p) (double), double(*q) (double), double (*r) (
     out << "part,error" << endl;
 
     for (int partition = 4; partition <= MAX_PARTITION; partition *= 2) {
-        vector<pair<double, double>> function = endDif(p, q, r, f, leftCondition, rightCondition, leftBound, rightBound, partition);
+        vector<pair<double, double>> function = solveBVP(p, q, r, f, leftBound, rightBound, leftCondition, rightCondition, partition);
         double error = fabs(function[1].second - answer(function[1].first));
         for (int i = 2; i < partition; ++i) {
             double cur = fabs(function[i].second - answer(function[i].first));
