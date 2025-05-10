@@ -23,7 +23,7 @@ void part_errorResearch(double (*equation) (double, double), double (*answer) (d
     std::ofstream out(filename);
     out << std::setprecision(20);
 
-    out << "part,error" << endl;
+    out << "h,error" << endl;
 
     for (int partition = 2; partition <= MAX_PARTITION; partition *= 2) {
         vector<pair<double, double>> function = runge_cutta4(equation, startCondition, leftBound, rightBound, partition);
@@ -32,14 +32,14 @@ void part_errorResearch(double (*equation) (double, double), double (*answer) (d
             double cur = fabs(function[i].second - answer(function[i].first));
             if (cur > error) error = cur;
         }
-        out << partition << "," << error << endl;
+        out << (rightBound - leftBound) / partition << "," << error << endl;
     }
 
     out.close();
 }
 
 void startResearches() {
-    part_errorResearch(equation, answer, LEFT_BOUND, RIGHT_BOUND, START_CONDITION, "data/part_error.csv");
+    part_errorResearch(equation, answer, LEFT_BOUND, RIGHT_BOUND, START_CONDITION, "data/h_error.csv");
 }
 
 int main() {
