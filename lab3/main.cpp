@@ -15,7 +15,7 @@
 #define INTEGRAL_VALUE_SMOOTH 4
 #define INTEGRAL_VALUE_BREAKDOWN 2 - 2 * cos(M_E)
 
-#define MAX_PARTITION 10000000
+#define MAX_PARTITION 100000000
 
 using std::ofstream;
 using std::string;

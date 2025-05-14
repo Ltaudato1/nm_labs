@@ -4,9 +4,9 @@
 #include "functions.hpp"
 #include "calc.hpp"
 
-#define MAX_NODES 7
+#define MAX_NODES 13
+#define POINTS_FOR_SPLINE_CALC 1000
 #define NODES_FOR_PLOT 8
-#define POINTS_FOR_ERROR_CALC 1000
 
 /**
  * @brief Функция запускает процесс исследования зависимости погрешности вычисления значения функции
@@ -18,7 +18,7 @@
  * @param filenamePlot Путь до текстового файла, куда будут записаны данные для построения графика интерполяционного сплайна
  * @param gridType Тип исследуемой сетки
  * 
- * @note Погрешность вычисляется как наибольшее отклонение от вычисляемой функции в одной из POINTS_FOR_ERROR_CALC точек,
+ * @note Погрешность вычисляется как наибольшее отклонение от вычисляемой функции в одной из POINTS_FOR_SPLINE_CALC точек,
  * равномерно разделённых на промежутке интерполирования
  * 
  */
@@ -30,8 +30,8 @@ void nodes_errorResearch(double (*function) (double), double (*derivative) (doub
         Point *grid {new Point[nodes]};
         getGrid(gridType, grid, function, derivative, nodes);
         double error = 0;
-        for (int j = 1; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC);
+        for (int j = 1; j < 10 * nodes; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (10 * nodes);
 
             double currentError = fabs(function(x) - getSplineValue(grid, x, nodes));
             if (currentError > error) error = currentError;
@@ -75,8 +75,8 @@ void makePlots() {
         FILE* fp = fopen(filename, "w");
         fprintf(fp, "x,y\n");
 
-        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+        for (int j = 0; j < POINTS_FOR_SPLINE_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_SPLINE_CALC - 1);
             double y = getSplineValue(grid, x, i);
 
             fprintf(fp, "%.20f,%.20f\n", x, y);
@@ -92,8 +92,8 @@ void makePlots() {
         FILE* fp = fopen(filename, "w");
         fprintf(fp, "x,y\n");
 
-        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+        for (int j = 0; j < POINTS_FOR_SPLINE_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_SPLINE_CALC - 1);
             double y = getSplineValue(grid, x, i);
 
             fprintf(fp, "%.20f,%.20f\n", x, y);
@@ -109,8 +109,8 @@ void makePlots() {
         FILE* fp = fopen(filename, "w");
         fprintf(fp, "x,y\n");
 
-        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+        for (int j = 0; j < POINTS_FOR_SPLINE_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_SPLINE_CALC - 1);
             double y = getSplineValue(grid, x, i);
 
             fprintf(fp, "%.20f,%.20f\n", x, y);
@@ -126,8 +126,8 @@ void makePlots() {
         FILE* fp = fopen(filename, "w");
         fprintf(fp, "x,y\n");
 
-        for (int j = 0; j < POINTS_FOR_ERROR_CALC; ++j) {
-            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_ERROR_CALC - 1);
+        for (int j = 0; j < POINTS_FOR_SPLINE_CALC; ++j) {
+            double x = LEFT_BOUND + (RIGHT_BOUND - LEFT_BOUND) * j / (POINTS_FOR_SPLINE_CALC - 1);
             double y = getSplineValue(grid, x, i);
 
             fprintf(fp, "%.20f,%.20f\n", x, y);
