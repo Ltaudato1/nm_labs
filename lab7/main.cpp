@@ -10,8 +10,8 @@
 #define LEFT_BOUND 0
 #define RIGHT_BOUND 4
 
-#define LEFT_CONDITION 3.5
-#define RIGHT_CONDITION 27.5
+#define LEFT_CONDITION 0
+#define RIGHT_CONDITION 0
 
 #define MAX_PARTITION 1048576 // 2^20
 
@@ -47,8 +47,8 @@ void startResearches() {
     cond.beta1 = 2;
     cond.leftBound = LEFT_BOUND;
     cond.rightBound = RIGHT_BOUND;
-    cond.y_left = 0;
-    cond.y_right = 0;
+    cond.y_left = LEFT_CONDITION;
+    cond.y_right = RIGHT_CONDITION;
     part_errorResearch(p, q, r, f, answer, cond, "data/part_error.csv");
 }
 
