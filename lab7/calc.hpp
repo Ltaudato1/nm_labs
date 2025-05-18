@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "functions.hpp"
 
 using std::vector;
 using std::pair;
@@ -10,9 +11,6 @@ vector<pair<double, double>> solveBVP(
     double (*q) (double), 
     double (*r) (double), 
     double (*f) (double), 
-    double leftBound, 
-    double rightBound, 
-    double leftCond, 
-    double rightCond, 
+    borderCond cond,
     int partitions
 );

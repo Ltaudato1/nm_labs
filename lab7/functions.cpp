@@ -21,8 +21,9 @@ double f(double x) {
  * @brief Возвращает значение решения ДУ для вычисления погрешности
  */
 double answer(double x) {
-    double c1 = (exp(-4) - 17) / (14 + 2 * exp(-4));
-    double c2 = c1 - 0.5;
+    double e = exp(-4);
+    double c1 = (e - 33) /  (22 - 6 * e);
+    double c2 = 3 * c1 + 0.5;
     return c1 * (2 * x - 1) + c2 * exp(-x) + (x * x + 1) / 2;
 }
 
