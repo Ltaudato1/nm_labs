@@ -4,7 +4,6 @@
 
 using std::vector;
 using std::pair;
-using std::make_pair;
 
 vector<pair<double,double>> solveBVP(
     double (*p)(double),
@@ -31,35 +30,55 @@ vector<pair<double,double>> solveBVP(
         double fi = f(x);
 
         a[i] = pi - qi * h / 2.0;
-        b[i] = -2.0 * pi + ri * h * h;
+        b[i] = h * h * ri - 2 * pi;
         c[i] = pi + qi * h / 2.0;
         d[i] = fi * h * h;
     }
 
-    double x0 = result[0].first;
-    double p0 = p(x0);
-    double q0 = q(x0);
-    double r0 = r(x0);
-    double f0 = f(x0);
-    
-    a[0] = 0.0;
-    b[0] = h * h * r0 - 2 * p0 + h * cond.alpha0 * (2 * p0 - h * q0) / cond.alpha1;
-    c[0] = 2 * p0;
-    d[0] = h * h * f0 + cond.y_left * (2 * p0 - h * q0) / cond.alpha1;
+    double a0 = cond.alpha0 - 3 * cond.alpha1 / (2 * h);
+    double b0 = 2 * cond.alpha1 / h;
+    double c0 = -cond.alpha1 / (2 * h);
+    double d0 = cond.y_left;
 
-    double xn = result[partitions-1].first;
-    double pn = p(xn);
-    double qn = q(xn);
-    double rn = r(xn);
-    double fn = f(xn);
-    
-    a[partitions-1] = 2 * pn;
-    b[partitions-1] = h * h * rn - 2 * pn - h * cond.beta0 * (2 * pn + h * qn) / cond.beta1;
-    c[partitions-1] = 0.0;
-    d[partitions-1] = h * h * fn - cond.y_right * (2 * pn + h * qn) / cond.beta1;
+    a[0] = 0.0;
+    if (c[1] == 0) { 
+        b[0] = a[1];
+        c[0] = b[1];
+        d[0] = d[1];
+
+        a[1] = a0;
+        b[1] = b0;
+        c[1] = c0;
+        d[1] = d0;
+    } else {
+        c[0] = b0 - c0 * b[1] / c[1];
+        b[0] = a0 - c0 * a[1] / c[1];
+        d[0] = d0 - c0 * d[1] / c[1];
+    }
+
+    a0 = cond.beta1 / (2 * h);
+    b0 = -2 * cond.beta1 / h;
+    c0 = cond.beta0 + 3 * cond.beta1 / (2 * h);
+    d0 = cond.y_right;
+
+    c[partitions - 1] = 0.0;
+    if (a[partitions - 2] == 0) {
+        a[partitions - 1] = b[partitions - 2];
+        b[partitions - 1] = c[partitions - 2];
+        d[partitions - 1] = d[partitions - 2];
+
+        a[partitions - 2] = a0;
+        b[partitions - 2] = b0;
+        c[partitions - 2] = c0;
+        d[partitions - 2] = d0;
+    } else {
+        a[partitions - 1] = b0 - a0 * b[partitions - 2] / a[partitions - 2];
+        b[partitions - 1] = c0 - a0 * c[partitions - 2] / a[partitions - 2];
+        d[partitions - 1] = d0 - a0 * d[partitions - 2] / a[partitions - 2];
+    }
+
 
     vector<double> alpha(partitions), beta(partitions);
-    
     alpha[0] = -c[0] / b[0];
     beta[0] = d[0] / b[0];
 
@@ -71,6 +90,7 @@ vector<pair<double,double>> solveBVP(
 
     result[partitions-1].second = beta[partitions-1];
     for (int i = partitions-2; i >= 0; --i) {
+        
         result[i].second = alpha[i] * result[i+1].second + beta[i];
     }
 

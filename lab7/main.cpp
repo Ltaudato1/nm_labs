@@ -33,7 +33,7 @@ void part_errorResearch(double (*p) (double), double(*q) (double), double (*r) (
             double cur = fabs(function[i].second - answer(function[i].first));
             if (cur > error) error = cur;
         }
-        out << (cond.rightBound - cond.leftBound) / partition << "," << error << endl;
+        out << (cond.rightBound - cond.leftBound) / (partition - 1) << "," << error << endl;
     }
 
     out.close();
