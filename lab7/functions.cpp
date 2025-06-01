@@ -22,8 +22,8 @@ double f(double x) {
  */
 double answer(double x) {
     double e = exp(-4);
-    double c1 = (e - 33) /  (22 - 6 * e);
-    double c2 = 3 * c1 + 0.5;
+    double c1 = -(e + 31) /  (22 - 6 * e);
+    double c2 = 3 * c1 - 0.5;
     return c1 * (2 * x - 1) + c2 * exp(-x) + (x * x + 1) / 2;
 }
 

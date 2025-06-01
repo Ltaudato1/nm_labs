@@ -10,8 +10,8 @@
 #define LEFT_BOUND 0
 #define RIGHT_BOUND 4
 
-#define LEFT_CONDITION 0
-#define RIGHT_CONDITION 0
+#define LEFT_CONDITION 1
+#define RIGHT_CONDITION 1
 
 #define MAX_PARTITION 1048576 // 2^20
 
